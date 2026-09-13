@@ -2,21 +2,27 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Author: Ram Annamalai L
 // 
-// Create Date: 18.01.2026 00:57:49
-// Design Name: 
+// Create Date: 18.01.2026 00:57:49 
 // Module Name: tof_predict
-// Project Name: 
-// Description: 
+// Project Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
+// Description:   Predicts the Time-of-Flight (TOF) for an acoustic signal traveling 
+//                across a sensor path of length (L_q) at speed (v_in), and computes 
+//                the error relative to the measured TOF (tmeas_q).
 // 
+// Mathematical Model:
+//   1. Predicted TOF : tpred_q = L_q / v_in
+//   2. Residual Error : error_q = tpred_q - tmeas_q
+//
 // Dependencies: 
+//   - div (Sequential Restoring Fixed-Point Divider)
 // 
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+//   - Signal parameters follow signed Q(WIDTH-FBITS).FBITS fixed-point encoding.
 //////////////////////////////////////////////////////////////////////////////////
 
-//`include "Div.v"
+//`include "div.sv"
 
 module tof_predict #(
     parameter WIDTH = 48,

@@ -3,23 +3,33 @@
 // Author: Ram Annamalai L
 // 
 // Create Date: 18.01.2026 00:57:49
-// Design Name: 
 // Module Name: gas_velocity_fsm
-// Project Name: 
-// Description: 
+// Description:   Calculates the speed of sound in a gas mixture (v) using the 
+//                ideal gas speed-of-sound formula: v = sqrt(gamma * R * T / M).
+//                Utilizes a combined datapath of multipliers, an iterative 
+//                divider, and an iterative square root module controlled by a 
+//                6-state Finite State Machine (FSM).
 // 
+// Mathematical Model:
+//   1. Numerator:   gamma_R_T = gamma * R * T
+//   2. Division:    div_out   = (gamma * R * T) / M
+//   3. Square Root: v         = sqrt(div_out)
+//
 // Dependencies: 
-// 
+//   - qmul  (Fixed-point Multiplier)
+//   - div   (Sequential Restoring Divider)
+//   - sqrt  (Sequential Square Root Core)
+//
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+//      - All inputs/outputs use signed Q24.24 fixed-point representation.
 //////////////////////////////////////////////////////////////////////////////////
 
 
-//`include "Mul.v"
-//`include "Div.v"
-//`include "Sqrt.v"
+//`include "mult.sv"
+//`include "div.sv"
+//`include "sqrt.sv"
 
 
 

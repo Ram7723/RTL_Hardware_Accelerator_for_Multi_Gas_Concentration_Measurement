@@ -3,21 +3,33 @@
 // Author: Ram Annamalai L
 // 
 // Create Date: 18.01.2026 00:57:49
-// Design Name: 
 // Module Name: nr_update_fsm
-// Project Name: 
-// Description: 
+// Project Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
+// Description:   Performs the single-step Newton-Raphson state update for gas 
+//                mole fraction:
+//                  rho_next = rho_curr - ( f(rho_curr) / f'(rho_curr) )
+//                
+// Implementation Details:
+//   - Instantiates a sequential fixed-point divider (`div`) to compute the 
+//     step increment delta = f_val / f_dash.
+//   - Uses a 5-state finite state machine (FSM) to coordinate division timing 
+//     and output subtraction.
 // 
+// Mathematical Model:
+//   1. Step Ratio: Delta = f(rho) / f'(rho)
+//   2. State Update: rho_next = rho_curr - Delta
+//
 // Dependencies: 
+//   - div (Sequential Restoring Fixed-Point Divider)
 // 
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+//   - Signals use signed Q(WIDTH-FBITS).FBITS fixed-point representation.
 //////////////////////////////////////////////////////////////////////////////////
 
 
-//`include "Div.v"
+//`include "div.sv"
 
 module nr_update_fsm #(
     parameter WIDTH = 48,

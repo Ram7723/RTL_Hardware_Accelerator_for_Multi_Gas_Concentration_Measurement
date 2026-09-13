@@ -3,9 +3,13 @@
 // Author: Ram Annamalai L 
 // Create Date: 18.01.2026 00:57:49
 // Module Name: div
-// Project Name: 
-// Description: 
-// 
+// Project Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
+// Description: Sequential, parameterized signed fixed-point divider using a 
+//              restoring division algorithm.
+// Features:     - Parameterizable data width and fractional bits.
+//               - Gaussian rounding (Round half to even).
+//               - Integrated flag generation for divide-by-zero (dbz) and overflow (ovf).
+// Target Specs: Default Q24.24 format (48-bit total width, 24 fractional bits).
 // Dependencies: 
 // 
 // Revision:
@@ -60,8 +64,14 @@ module div #(
         end
     end
 
-    // calculation state machine
+    // Calculation state machine
     enum {IDLE, INIT, CALC, ROUND, SIGN} state;
+    // Main Control State Machine States:
+    // IDLE  - Waiting for start signal, checks edge cases (divide-by-zero, min-int overflow)
+    // INIT  - Initializes internal registers and loads absolute values
+    // CALC  - Runs shift-subtract division steps over 'ITER' cycles with dynamic overflow checking
+    // ROUND - Executes Gaussian rounding (Round half to even) on extra fraction bits
+    // SIGN  - Applies final sign conversion (Two's Complement) based on input polarity
     always_ff @(posedge clk) begin
         done <= 0;
         case (state)
@@ -125,6 +135,8 @@ module div #(
                 end
             end
         endcase
+        
+        // Synchronous Reset Initialization
         if (rst) begin
             state <= IDLE;
             busy <= 0;

@@ -3,9 +3,16 @@
 // Author: Ram Annamalai L 
 // Create Date: 18.01.2026 00:57:49
 // Module Name: sqrt
-// Project Name: 
-// Description: 
-// 
+// Project Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
+// Description: Iterative Digit-by-Digit (Non-Restoring style) Square Root Core 
+//              supporting unsigned integer or fixed-point numbers in Q(WIDTH-FBITS).FBITS format.
+// Parameters:
+//   - WIDTH: Total bit-width of input radicand 'rad' and outputs 'root', 'rem'.
+//   - FBITS: Number of fractional bits (determines fractional root precision).
+// Algorithm Details:
+//   Calculates root bit-by-bit from MSB to LSB over (WIDTH + FBITS) / 2 clock cycles.
+//   Pairs of bits are shifted from the radicand into an accumulator, and a test subtraction
+//   is evaluated to append either 1 or 0 to the developing root vector 'q'.
 // Dependencies: 
 // 
 // Revision:

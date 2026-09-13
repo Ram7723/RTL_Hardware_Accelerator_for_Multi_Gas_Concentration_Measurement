@@ -3,10 +3,22 @@
 // Author: Ram Annamalai L
 // 
 // Create Date: 18.01.2026 00:57:49
-// Design Name: 
+// Design Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
 // Module Name: Mix_cal
 // Project Name: 
-// Description: 
+// Description:   Hardware module computing the differential sensitivity ratio 
+//                (dt/dp) for acoustic multi-gas sensing applications. Incorporates 
+//                a fixed-point multiplier network paired with a sequential divider 
+//                managed by a 4-state Finite State Machine (FSM).
+// Parameters:
+//   - WIDTH: Total bit-width for signed Q-format operands (default 48).
+//   - FBITS: Fractional precision bits (default 24 -> Q24.24 format).
+//
+// Math Formulation:
+//   1. ΔM = M2 - M1,  Δk = k2 - k1
+//   2. NUM = L * (k·ΔM - M·Δk)
+//   3. DEN = 2 * R * T * k²
+//   4. dt_dp = (NUM / DEN) * v
 // 
 // Dependencies: 
 // 
@@ -17,14 +29,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-//`include "Mul.v"
+//`include "mult.sv"
+// `include "div.sv"
 
 module biogas_mixture_properties #(
     // --------------------------------------------------
     // Fixed-point configuration
     // --------------------------------------------------
-    parameter int WIDTH = 48,          // total width
-    parameter int FBITS = 24,          // fractional bits (Q24.24)
+    parameter int WIDTH = 48,          // Total bit-width (Q24.24)
+    parameter int FBITS = 24,          // Fractional bits (Q24.24)
 
     // --------------------------------------------------
     // Gas constants (Q24.24)

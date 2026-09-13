@@ -3,22 +3,38 @@
 // Author: Ram Annamalai L
 // 
 // Create Date: 18.01.2026 00:57:49
-// Design Name: 
 // Module Name: nr_iterator_top
-// Project Name: 
-// Description: 
+// Project Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
+// Description:   Top-level Newton-Raphson iterative solver engine for determining
+//                gas mole fraction (rho) from Time-of-Flight (TOF) measurement data.
+//
+// Newton-Raphson Iteration Formula:
+//   rho_{n+1} = rho_n - f(rho_n) / f'(rho_n)
+//
+// Iterative Computation Loop:
+//   1. Mixture Calculation : Compute M_mix, gamma_mix from current mole fraction (rho_curr).
+//   2. Speed of Sound      : Compute sound velocity (v_calc) using gas_velocity_fsm.
+//   3. Function Evaluation : Compute TOF error f(rho) = t_pred - t_meas using tof_predict.
+//   4. Derivative Evaluation: Compute f'(rho) = dt/drho using dt_dp_single_fsm.
+//   5. NR Step Update      : Compute rho_next = rho_curr - (f / f') using nr_update_fsm.
+//   6. Convergence Check   : Loop until iter_cnt reaches MAX_ITERS.
 // 
 // Dependencies: 
+//   - biogas_mixture_properties
+//   - gas_velocity_fsm
+//   - tof_predict
+//   - dt_dp_single_fsm
+//   - nr_update_fsm
 // 
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+//   - All numerical inputs and outputs are in signed Q24.24 fixed-point format.
 //////////////////////////////////////////////////////////////////////////////////
 
 
-//`include "Mix_cal.v"
-//`include "Velocity.v"
+//`include "biogas_mixture_properties.sv"
+//`include "gas_velocity_fsm.sv"
 //`include "tof_predict.v"
 //`include "Diff_main.v"
 //`include "nr_update.v"

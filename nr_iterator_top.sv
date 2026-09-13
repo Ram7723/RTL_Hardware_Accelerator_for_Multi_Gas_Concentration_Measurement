@@ -35,9 +35,9 @@
 
 //`include "biogas_mixture_properties.sv"
 //`include "gas_velocity_fsm.sv"
-//`include "tof_predict.v"
-//`include "Diff_main.v"
-//`include "nr_update.v"
+//`include "tof_predict.sv"
+//`include "dt_dp_single_fsm.sv"
+//`include "nr_update.sv"
 
 module nr_iterator_top #(
     parameter WIDTH = 48,

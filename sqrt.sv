@@ -44,9 +44,13 @@ module sqrt #(
     logic [$clog2(ITER)-1:0] i;            // iteration counter
 
     always_comb begin
+        // Perform trial subtraction: test_res = ac - (q * 4 + 1)
         test_res = ac - {q, 2'b01};
+        // If test_res >= 0 (MSB test_res[WIDTH+1] == 0), the trial bit is '1'
         if (test_res[WIDTH+1] == 0) begin  // test_res ≥0? (check MSB)
+            // Retain subtraction result and shift in next 2 bits from radicand x
             {ac_next, x_next} = {test_res[WIDTH-1:0], x, 2'b0};
+            // Append 1 to developing root
             q_next = {q[WIDTH-2:0], 1'b1};
         end else begin
             {ac_next, x_next} = {ac[WIDTH-1:0], x, 2'b0};

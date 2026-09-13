@@ -3,24 +3,19 @@
 // Author: Ram Annamalai L
 // 
 // Create Date: 18.01.2026 00:57:49
-// Design Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
-// Module Name: Mix_cal
-// Project Name: 
-// Description:   Hardware module computing the differential sensitivity ratio 
-//                (dt/dp) for acoustic multi-gas sensing applications. Incorporates 
-//                a fixed-point multiplier network paired with a sequential divider 
-//                managed by a 4-state Finite State Machine (FSM).
-// Parameters:
-//   - WIDTH: Total bit-width for signed Q-format operands (default 48).
-//   - FBITS: Fractional precision bits (default 24 -> Q24.24 format).
-//
-// Math Formulation:
-//   1. ΔM = M2 - M1,  Δk = k2 - k1
-//   2. NUM = L * (k·ΔM - M·Δk)
-//   3. DEN = 2 * R * T * k²
-//   4. dt_dp = (NUM / DEN) * v
+// Module Name: Mix_cal 
+// Project Name:  RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
+// Description:   Calculates the weighted physical properties (molar mass M_mix and 
+//                ratio of specific heats gamma_mix) for a binary gas mixture 
+//                (N2 + HFC/Heavy Component) using Q24.24 fixed-point math.
 // 
+// Mathematical Model:
+//   - Complementary mole fraction: rho2 = 1.0 - rho1
+//   - Mixture Molar Mass:          M_mix = (rho2 * M_N2) + (rho1 * M_HFC)
+//   - Mixture Specific Heat Ratio: gamma_mix = (rho2 * G_N2) + (rho1 * G_HFC)
+//
 // Dependencies: 
+//   - qmul (Fixed-point Multiplier)
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -29,15 +24,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-//`include "mult.sv"
-// `include "div.sv"
+//`include "Mul.v"
 
 module biogas_mixture_properties #(
     // --------------------------------------------------
     // Fixed-point configuration
     // --------------------------------------------------
-    parameter int WIDTH = 48,          // Total bit-width (Q24.24)
-    parameter int FBITS = 24,          // Fractional bits (Q24.24)
+    parameter int WIDTH = 48,          // total width
+    parameter int FBITS = 24,          // fractional bits (Q24.24)
 
     // --------------------------------------------------
     // Gas constants (Q24.24)

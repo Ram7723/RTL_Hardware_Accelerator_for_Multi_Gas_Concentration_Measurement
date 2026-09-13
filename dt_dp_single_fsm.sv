@@ -3,12 +3,24 @@
 // Author: Ram Annamalai L
 // 
 // Create Date: 18.01.2026 00:57:49
-// Design Name: 
 // Module Name: dt_dp_single_fsm
-// Project Name: 
-// Description: 
-// 
+// Project Name: RTL_Hardware_Accelerator_for_Multi_Gas_Concentration_Measurement
+// Description:   Hardware module computing the differential sensitivity ratio 
+//                (dt/dp) for acoustic multi-gas sensing applications. Incorporates 
+//                a fixed-point multiplier network paired with a sequential divider 
+//                managed by a 4-state Finite State Machine (FSM).
 // Dependencies: 
+//   - div (Sequential Restoring Fixed-Point Divider)
+//   - qmul  (Fixed-point Multiplier)
+// Parameters:
+//   - WIDTH: Total bit-width for signed Q-format operands (default 48).
+//   - FBITS: Fractional precision bits (default 24 -> Q24.24 format).
+//
+// Math Formulation:
+//   1. ΔM = M2 - M1,  Δk = k2 - k1
+//   2. NUM = L * (k·ΔM - M·Δk)
+//   3. DEN = 2 * R * T * k²
+//   4. dt_dp = (NUM / DEN) * v
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -17,8 +29,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-//`include "Mul.v"
-//`include "Div.v"
+//`include "mult.sv"
+//`include "div.sv"
 
 module dt_dp_single_fsm #(
     parameter WIDTH = 48,
